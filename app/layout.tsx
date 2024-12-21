@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Sidebar from "./_components/sidebar";
 import { Inter } from 'next/font/google'
+import { ThemeProvider } from "./_components/theme-provider";
  
 const inter = Inter({
   subsets: ['latin'],
@@ -19,14 +20,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.className} antialiased`}
-      >
-        <div className="flex gap-8 h-full">
-          <Sidebar />
-          {children}
-        </div>
+    <html lang="pt-BR">
+      <body className={`${inter.className} antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex h-full">
+            <Sidebar />
+            {children}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );
