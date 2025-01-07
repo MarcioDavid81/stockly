@@ -1,8 +1,15 @@
-import { PlusIcon } from "lucide-react";
-import { Button } from "../_components/ui/button";
+// import { PlusIcon } from "lucide-react";
+// import { Button } from "../_components/ui/button";
 import { DataTable } from "../_components/ui/data-table";
 import { productTableColumns } from "./_components/table-colums";
 import { getProducts } from "../_data-access/product/get-products";
+import CreateProductButton from "./_components/create-product-button";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Produtos",
+  description: "Veja um resumo das suas finanças.",
+};
 
 const ProductsPage = async () => {
   
@@ -17,12 +24,9 @@ const ProductsPage = async () => {
           </span>
           <h2 className="text-xl font-semibold">Produtos</h2>
         </div>
-        <Button className="gap-2">
-          <PlusIcon size={20} />
-          Novo Produto
-        </Button>
+        <CreateProductButton />
       </div>
-      <DataTable columns={productTableColumns} data={products} />
+      <DataTable columns={productTableColumns} data={JSON.parse(JSON.stringify(products))} />
     </div>
   );
 };

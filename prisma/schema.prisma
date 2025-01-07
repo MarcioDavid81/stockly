@@ -21,6 +21,41 @@ model Product {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   saleProducts SaleProduct[]
+  entrieProducts EntrieProduct[]
+}
+
+model Supplier {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Destination {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Entrie {
+  id        String   @id @default(uuid())
+  date      DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  entrieProducts EntrieProduct[]
+}
+
+model EntrieProduct {
+  id        String   @id @default(uuid())
+  entrieId  String
+  entrie    Entrie   @relation(fields: [entrieId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  unitPrice Decimal  @db.Decimal(10, 2)
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Sale {
