@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "./_components/sidebar";
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from "./_components/theme-provider";
+import { ClerkProvider } from "@clerk/nextjs";
+import { neobrutalism } from "@clerk/themes";
  
 const inter = Inter({
   subsets: ['latin'],
@@ -26,6 +27,11 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${inter.className} antialiased`}>
+        <ClerkProvider
+        appearance={{
+          baseTheme: neobrutalism,
+        }}
+        >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -33,10 +39,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="flex h-full">
-            <Sidebar />
+
             {children}
           </div>
         </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

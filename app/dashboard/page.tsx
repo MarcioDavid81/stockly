@@ -1,15 +1,14 @@
-import { auth } from "@clerk/nextjs/server";
-import Sidebar from "../_components/sidebar";
-import EntriesProductButton from "./_components/entries-product-button";
 import { Metadata } from "next";
+import Sidebar from "../_components/sidebar";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Entradas",
+  title: "Stockly - Dashboard",
   description: "Veja um resumo das suas finanças.",
 };
 
-const EntriesPage = async () => {
+const Home = async () => {
 
     /* Função para redirecionar caso o usuário não esteja auntenticado */
     const { userId } = await auth();
@@ -26,13 +25,12 @@ const EntriesPage = async () => {
             <span className="text-xs font-semibold text-slate-500">
               Gestão de Produtos
             </span>
-            <h2 className="text-xl font-semibold">Entradas</h2>
+            <h2 className="text-xl font-semibold">Dashboard</h2>
           </div>
-          <EntriesProductButton />
         </div>
       </div>
     </>
   );
 };
 
-export default EntriesPage;
+export default Home;
