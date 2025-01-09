@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Stockly - Dashboard",
+  title: "Dashboard",
   description: "Veja um resumo das suas finanças.",
 };
 
