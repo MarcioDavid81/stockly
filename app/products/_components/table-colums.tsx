@@ -15,16 +15,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { CircleIcon, ClipboardCopyIcon, EditIcon, MoreHorizontalIcon, Trash2Icon } from "lucide-react";
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/app/_components/ui/alert-dialog";
 import DeleteProductDialogContent from "./delete-dialog-content";
+import { toast } from "sonner";
 
 const getStatusLabel = (status: string) => {
   if (status === "IN_STOCK") {
@@ -71,6 +65,13 @@ export const productTableColumns: ColumnDef<Product>[] = [
     header: "Ações",
     cell: (row) => {
       const product = row.row.original;
+
+      //Função para copiar o ID do produto para a área de transferência
+      const handleCopyProductId = () => {
+        navigator.clipboard.writeText(product.id);
+        toast.success("ID do produto copiado com sucesso para a área de transferência!");
+      };
+
       return (
         <AlertDialog>
           <DropdownMenu>
@@ -84,7 +85,7 @@ export const productTableColumns: ColumnDef<Product>[] = [
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="gap-1.5"
-                onClick={() => navigator.clipboard.writeText(product.id)}
+                onClick={handleCopyProductId}
               >
                 <ClipboardCopyIcon size={16} />
                 Copiar ID
