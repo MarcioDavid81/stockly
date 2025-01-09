@@ -1,10 +1,10 @@
 "use client";
 
-import { createProduct } from "@/app/_actions/product/create-product";
+import { upsertProduct } from "@/app/_actions/product/upsert-product";
 import {
-  createProductSchema,
-  CreateProductSchema,
-} from "@/app/_actions/product/create-product/schema";
+  upsertProductSchema,
+  UpsertProductSchema,
+} from "@/app/_actions/product/upsert-product/schema";
 import { Button } from "@/app/_components/ui/button";
 import {
   DialogClose,
@@ -30,27 +30,35 @@ import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 
 interface UpsertDialogContentProps {
-    onSuccess?: () => void;
+  defaultValues?: UpsertProductSchema;
+  onSuccess?: () => void;
 }
 
-const UpsertProductDialogContent = ({onSuccess}: UpsertDialogContentProps) => {
-
-
-  const form = useForm<CreateProductSchema>({
+const UpsertProductDialogContent = ({
+  defaultValues,
+  onSuccess,
+}: UpsertDialogContentProps) => {
+  const form = useForm<UpsertProductSchema>({
     shouldUnregister: true,
-    resolver: zodResolver(createProductSchema),
-    defaultValues: {
+    resolver: zodResolver(upsertProductSchema),
+    defaultValues: defaultValues ?? {
       name: "",
       price: 0,
       stock: 0,
     },
   });
 
-  const onSubmit = async (data: CreateProductSchema) => {
+  const isEditing = !!defaultValues;
+
+  const onSubmit = async (data: UpsertProductSchema) => {
     try {
-      await createProduct(data);
+      await upsertProduct({...data, id: defaultValues?.id});
       onSuccess?.();
-      toast.success("Produto criado com sucesso");
+      {
+        isEditing
+          ? toast.success("Produto atualizado com sucesso!")
+          : toast.success("Produto criado com sucesso!");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -61,8 +69,14 @@ const UpsertProductDialogContent = ({onSuccess}: UpsertDialogContentProps) => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <DialogHeader>
-            <DialogTitle>Novo Produto</DialogTitle>
-            <DialogDescription>Insira as informações abaixo</DialogDescription>
+            <DialogTitle>
+              {isEditing ? "Editar Produto" : "Novo Produto"}
+            </DialogTitle>
+            <DialogDescription>
+              {isEditing
+                ? "Você pode editar qualquer um dos campos"
+                : "Insira as informações abaixo"}
+            </DialogDescription>
           </DialogHeader>
           <FormField
             control={form.control}
