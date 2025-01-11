@@ -1,8 +1,14 @@
 import { auth } from "@clerk/nextjs/server";
 import Sidebar from "../_components/sidebar";
-import ExitsProductButton from "./_components/exits-product-button";
+
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { Sheet, SheetTrigger } from "../_components/ui/sheet";
+import UpsertSheetContent from "./_components/upsert-sheet-content";
+import { Button } from "../_components/ui/button";
+import { PlusIcon } from "lucide-react";
+import { getProducts } from "../_data-access/product/get-products";
+import { ComboboxOption } from "../_components/ui/combobox";
 
 export const metadata: Metadata = {
   title: "Saídas",
@@ -10,12 +16,18 @@ export const metadata: Metadata = {
 };
 
 const ExitsPage = async () => {
+  /* Função para redirecionar caso o usuário não esteja auntenticado */
+  const { userId } = await auth();
+  if (!userId) {
+    redirect("/");
+  }
+  /* Função para lista os produtos do banco de dados */
+  const products = await getProducts();
 
-    /* Função para redirecionar caso o usuário não esteja auntenticado */
-    const { userId } = await auth();
-    if (!userId) {
-      redirect("/");
-    }
+  const productOptions: ComboboxOption[] = products.map((product) => ({
+    value: product.id,
+    label: product.name,
+  }));
 
   return (
     <>
@@ -28,7 +40,15 @@ const ExitsPage = async () => {
             </span>
             <h2 className="text-xl font-semibold">Saídas</h2>
           </div>
-          <ExitsProductButton />
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button>
+                <PlusIcon size={20} />
+                Nova Saída
+              </Button>
+            </SheetTrigger>
+            <UpsertSheetContent products={products} productOptions={productOptions} />
+          </Sheet>
         </div>
       </div>
     </>
