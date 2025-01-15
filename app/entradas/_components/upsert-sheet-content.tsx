@@ -36,8 +36,8 @@ import {
 import { formatCurrency } from "@/app/_helpers/currency";
 import TableDropdownMenu from "./table-dropdown-menu";
 import { Product } from "@prisma/client";
-import { createExit } from "@/app/_actions/exit/upsert-exit";
 import { toast } from "sonner";
+import { createEntrie } from "@/app/_actions/entrie/upsert-entrie";
 
 const formSchema = z.object({
   productId: z.string().uuid({
@@ -90,16 +90,6 @@ const UpsertSheetContent = ({
         (product) => product.id === selectedProduct.id,
       );
       if (existedProduct) {
-        /*Verifica se a quantidade de produtos adicionados é maior que a quantidade em estoque */
-        const productIsOutOffStock =
-          existedProduct.quantity + data.quantity > selectedProduct.stock;
-        if (productIsOutOffStock) {
-          form.setError("quantity", {
-            message: "Quantidade indisponível em estoque.",
-          });
-          return currentProducts;
-        }
-        form.reset();
         return currentProducts.map((product) => {
           if (product.id === selectedProduct.id) {
             return {
@@ -110,15 +100,6 @@ const UpsertSheetContent = ({
           return product;
         });
       }
-      /*Verifica se a quantidade de produtos adicionados é maior que a quantidade em estoque */
-      const productIsOutOffStock = data.quantity > selectedProduct.stock;
-      if (productIsOutOffStock) {
-        form.setError("quantity", {
-          message: "Quantidade indisponível em estoque.",
-        });
-        return currentProducts;
-      }
-      form.reset();
       return [
         ...currentProducts,
         {
@@ -151,18 +132,18 @@ const UpsertSheetContent = ({
   };
 
   /*Função para registrar a saída */
-  const onSubmitExit = async () => {
+  const onSubmitEntrie = async () => {
     try {
-      await createExit({
+      await createEntrie({
         products: selectedProducts.map((product) => ({
           id: product.id,
           quantity: product.quantity,
         })),
       });
-      toast.success("Saída registrada com sucesso.");
+      toast.success("Entrada registrada com sucesso.");
       onSubmitSuccess();
     } catch (error) {
-      toast.error("Erro ao registrar a saída.");
+      toast.error("Erro ao registrar a entrada.");
     }
   };
 
@@ -218,7 +199,7 @@ const UpsertSheetContent = ({
         </form>
       </Form>
       <Table>
-        <TableCaption>Produtos adicionados a esta saída</TableCaption>
+        <TableCaption>Produtos adicionados a esta entrada</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Produto</TableHead>
@@ -265,10 +246,10 @@ const UpsertSheetContent = ({
           className="w-full gap-2"
           variant="default"
           disabled={selectedProducts.length === 0}
-          onClick={onSubmitExit}
+          onClick={onSubmitEntrie}
         >
           <CheckIcon size={20} />
-          Finalizar Saída
+          Registrar Entrada
         </Button>
       </SheetFooter>
     </SheetContent>

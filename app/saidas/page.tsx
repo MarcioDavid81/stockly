@@ -3,12 +3,9 @@ import Sidebar from "../_components/sidebar";
 
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Sheet, SheetTrigger } from "../_components/ui/sheet";
-import UpsertSheetContent from "./_components/upsert-sheet-content";
-import { Button } from "../_components/ui/button";
-import { PlusIcon } from "lucide-react";
 import { getProducts } from "../_data-access/product/get-products";
 import { ComboboxOption } from "../_components/ui/combobox";
+import CreateExitButton from "./_components/create-exit-button";
 
 export const metadata: Metadata = {
   title: "Saídas",
@@ -21,13 +18,14 @@ const ExitsPage = async () => {
   if (!userId) {
     redirect("/");
   }
-  /* Função para lista os produtos do banco de dados */
+  /* Função para listar os produtos do banco de dados */
   const products = await getProducts();
 
   const productOptions: ComboboxOption[] = products.map((product) => ({
-    value: product.id,
     label: product.name,
+    value: product.id,
   }));
+
 
   return (
     <>
@@ -40,15 +38,10 @@ const ExitsPage = async () => {
             </span>
             <h2 className="text-xl font-semibold">Saídas</h2>
           </div>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button>
-                <PlusIcon size={20} />
-                Nova Saída
-              </Button>
-            </SheetTrigger>
-            <UpsertSheetContent products={products} productOptions={productOptions} />
-          </Sheet>
+          <CreateExitButton
+            products={products}
+            productOptions={productOptions}
+          />
         </div>
       </div>
     </>

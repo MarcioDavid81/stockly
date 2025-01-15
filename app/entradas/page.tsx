@@ -1,8 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import Sidebar from "../_components/sidebar";
-import EntriesProductButton from "./_components/entries-product-button";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
+import CreateEntrieButton from "./_components/create-entrie-button";
+import { getProducts } from "../_data-access/product/get-products";
+import { ComboboxOption } from "../_components/ui/combobox";
 
 export const metadata: Metadata = {
   title: "Entradas",
@@ -17,6 +19,14 @@ const EntriesPage = async () => {
       redirect("/");
     }
 
+      /* Função para listar os produtos do banco de dados */
+      const products = await getProducts();
+    
+      const productOptions: ComboboxOption[] = products.map((product) => ({
+        label: product.name,
+        value: product.id,
+      }));
+
   return (
     <>
       <Sidebar />
@@ -28,7 +38,7 @@ const EntriesPage = async () => {
             </span>
             <h2 className="text-xl font-semibold">Entradas</h2>
           </div>
-          <EntriesProductButton />
+          <CreateEntrieButton products={products} productOptions={productOptions} />
         </div>
       </div>
     </>
