@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Inter } from 'next/font/google'
+import { Nunito } from 'next/font/google'
 import { ThemeProvider } from "./_components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { neobrutalism } from "@clerk/themes";
 import { Toaster } from "./_components/ui/sonner";
  
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'auto',
+const nunito = Nunito({
+  weight: ["400", "700"],
+  style: "normal",
+  display: "swap",
+  subsets: ["latin-ext"],
 })
 
 export const metadata: Metadata = {
@@ -27,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${nunito.className} antialiased`}>
         <ClerkProvider
         appearance={{
           baseTheme: neobrutalism,

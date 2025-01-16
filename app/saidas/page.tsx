@@ -6,6 +6,9 @@ import { redirect } from "next/navigation";
 import { getProducts } from "../_data-access/product/get-products";
 import { ComboboxOption } from "../_components/ui/combobox";
 import CreateExitButton from "./_components/create-exit-button";
+import { DataTable } from "../_components/ui/data-table";
+import { exitTableColumns } from "./_components/table-colums";
+import { getExits } from "../_data-access/exits/get-exits";
 
 export const metadata: Metadata = {
   title: "Saídas",
@@ -26,6 +29,9 @@ const ExitsPage = async () => {
     value: product.id,
   }));
 
+  /* Função para listar as saídas */
+  const exits = await getExits();
+
 
   return (
     <>
@@ -43,6 +49,10 @@ const ExitsPage = async () => {
             productOptions={productOptions}
           />
         </div>
+                <DataTable
+                  columns={exitTableColumns}
+                  data={JSON.parse(JSON.stringify(exits))}
+                />
       </div>
     </>
   );
