@@ -49,10 +49,11 @@ const ExitsPage = async () => {
             productOptions={productOptions}
           />
         </div>
-                <DataTable
-                  columns={exitTableColumns}
-                  data={JSON.parse(JSON.stringify(exits))}
-                />
+        <DataTable
+          columns={exitTableColumns}
+          data={JSON.parse(JSON.stringify(exits))}
+          pageSize={4}
+        />
       </div>
     </>
   );

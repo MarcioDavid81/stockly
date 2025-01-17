@@ -3,8 +3,9 @@
 import { Badge } from "@/app/_components/ui/badge";
 import { Product } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { CircleIcon } from "lucide-react";
+import { ArrowUpDown, CircleIcon } from "lucide-react";
 import ProductTableDropdownMenu from "./table-dropdown-menu";
+import { Button } from "@/app/_components/ui/button";
 
 const getStatusLabel = (status: string) => {
   if (status === "IN_STOCK") {
@@ -16,7 +17,17 @@ const getStatusLabel = (status: string) => {
 export const productTableColumns: ColumnDef<Product>[] = [
   {
     accessorKey: "name",
-    header: "Produto",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Produto
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "price",

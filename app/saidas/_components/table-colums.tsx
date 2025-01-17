@@ -4,12 +4,22 @@ import { Button } from "@/app/_components/ui/button";
 import { ExitsDto } from "@/app/_data-access/exits/get-exits";
 import { formatCurrency } from "@/app/_helpers/currency";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontalIcon } from "lucide-react";
+import { ArrowUpDown, MoreHorizontalIcon } from "lucide-react";
 
 export const exitTableColumns: ColumnDef<ExitsDto>[] = [
   {
     accessorKey: "productName",
-    header: "Produto",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Produto
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "totalProducts",
@@ -19,9 +29,9 @@ export const exitTableColumns: ColumnDef<ExitsDto>[] = [
     accessorKey: "totalAmount",
     header: "Valor Total",
     cell: ({
-        row: {
-            original: { totalAmount },
-        }
+      row: {
+        original: { totalAmount },
+      },
     }) => formatCurrency(totalAmount),
   },
   {
