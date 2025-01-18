@@ -22,7 +22,7 @@ interface ExitsTableDropdownMenuProps {
   onDelete: (productId: string) => void;
 }
 
-const ExitsTableDropdownMenu = ({
+const UpsertExitTableDropdownMenu = ({
   product,
   onDelete,
 }: ExitsTableDropdownMenuProps) => {
@@ -63,4 +63,4 @@ const ExitsTableDropdownMenu = ({
   );
 };
 
-export default ExitsTableDropdownMenu;
+export default UpsertExitTableDropdownMenu;

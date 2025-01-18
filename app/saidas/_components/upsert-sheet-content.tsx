@@ -34,7 +34,7 @@ import {
   TableRow,
 } from "@/app/_components/ui/table";
 import { formatCurrency } from "@/app/_helpers/currency";
-import TableDropdownMenu from "./table-dropdown-menu";
+import UpsertExitTableDropdownMenu from "./upsert-table-dropdown-menu";
 import { Product } from "@prisma/client";
 import { createExit } from "@/app/_actions/exit/upsert-exit";
 import { toast } from "sonner";
@@ -244,7 +244,7 @@ const UpsertSheetContent = ({
                 )}
               </TableCell>
               <TableCell>
-                <TableDropdownMenu product={product} onDelete={onDelete} />
+                <UpsertExitTableDropdownMenu product={product} onDelete={onDelete} />
               </TableCell>
             </TableRow>
           ))}
