@@ -4,7 +4,8 @@ import { Button } from "@/app/_components/ui/button";
 import { ExitsDto } from "@/app/_data-access/exits/get-exits";
 import { formatCurrency } from "@/app/_helpers/currency";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontalIcon } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
+import ExitsTableDropdownMenu from "./table-dropdown-menu";
 
 export const exitTableColumns: ColumnDef<ExitsDto>[] = [
   {
@@ -44,10 +45,8 @@ export const exitTableColumns: ColumnDef<ExitsDto>[] = [
   },
   {
     header: "Ações",
-    cell: () => (
-      <Button variant="ghost">
-        <MoreHorizontalIcon size={16} />
-      </Button>
+    cell: ({row: {original: sale}}) => (
+      <ExitsTableDropdownMenu exit={sale} />
     ),
   },
 ];
