@@ -1,11 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { db } from "@/app/_lib/prisma";
 import { revalidatePath } from "next/cache";
-import { upsertSaleSchema, UpsertSaleSchema } from "./schema";
+import { ProductIsOutOfStockError, upsertSaleSchema, UpsertSaleSchema } from "./schema";
 
-export const createExit = async (data: UpsertSaleSchema) => {
+interface CreateExitResponse {
+  data?: any;
+  error?: any;
+}
+
+
+export const createExit = async (data: UpsertSaleSchema): Promise<CreateExitResponse>=> {
   upsertSaleSchema.parse(data);
+  const response: CreateExitResponse = {
+    error: null,
+    data: null,
+  };
   await db.$transaction(async (trx) => {
     const sale = await trx.sale.create({
       data: {
@@ -21,13 +32,13 @@ export const createExit = async (data: UpsertSaleSchema) => {
         },
       });
       if (!productFromDb) {
-        throw new Error("Product not found");
+       return response.error = "Product not found";
       }
   
       /*Verifica se a quantidade de produtos adicionados é maior que a quantidade em estoque */
       const productIsOutOfStock = product.quantity > productFromDb.stock;
       if (productIsOutOfStock) {
-        throw new Error("Product out of stock");
+        return response.error = new ProductIsOutOfStockError().message;
       }
       
       /*Cria a saída do produto */
@@ -50,6 +61,8 @@ export const createExit = async (data: UpsertSaleSchema) => {
         },
       });
     }
+    response.data = sale;
   })
   revalidatePath("/products");
+  return response;
 };

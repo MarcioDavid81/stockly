@@ -152,18 +152,17 @@ const UpsertSheetContent = ({
 
   /*Função para registrar a saída */
   const onSubmitExit = async () => {
-    try {
-      await createExit({
-        products: selectedProducts.map((product) => ({
-          id: product.id,
-          quantity: product.quantity,
-        })),
-      });
-      toast.success("Saída registrada com sucesso.");
-      onSubmitSuccess();
-    } catch (error) {
-      toast.error("Erro ao registrar a saída.");
+    const response = await createExit({
+      products: selectedProducts.map((product) => ({
+        id: product.id,
+        quantity: product.quantity,
+      })),
+    });
+    if (response.error) {
+      return toast.error(response.error);
     }
+    toast.success("Saída registrada com sucesso.");
+    onSubmitSuccess();
   };
 
   return (
@@ -244,7 +243,10 @@ const UpsertSheetContent = ({
                 )}
               </TableCell>
               <TableCell>
-                <UpsertExitTableDropdownMenu product={product} onDelete={onDelete} />
+                <UpsertExitTableDropdownMenu
+                  product={product}
+                  onDelete={onDelete}
+                />
               </TableCell>
             </TableRow>
           ))}
@@ -276,4 +278,3 @@ const UpsertSheetContent = ({
 };
 
 export default UpsertSheetContent;
-

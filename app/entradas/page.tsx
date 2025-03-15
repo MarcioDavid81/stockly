@@ -5,6 +5,9 @@ import { redirect } from "next/navigation";
 import CreateEntrieButton from "./_components/create-entrie-button";
 import { getProducts } from "../_data-access/product/get-products";
 import { ComboboxOption } from "../_components/ui/combobox";
+import { DataTable } from "../_components/ui/data-table";
+import { entrieTableColumns } from "./_components/table-colums";
+import { getEntries } from "../_data-access/entries/get-entries";
 
 export const metadata: Metadata = {
   title: "Entradas",
@@ -12,20 +15,22 @@ export const metadata: Metadata = {
 };
 
 const EntriesPage = async () => {
+  /* Função para redirecionar caso o usuário não esteja auntenticado */
+  const { userId } = await auth();
+  if (!userId) {
+    redirect("/");
+  }
 
-    /* Função para redirecionar caso o usuário não esteja auntenticado */
-    const { userId } = await auth();
-    if (!userId) {
-      redirect("/");
-    }
+  /* Função para listar os produtos do banco de dados */
+  const products = await getProducts();
 
-      /* Função para listar os produtos do banco de dados */
-      const products = await getProducts();
-    
-      const productOptions: ComboboxOption[] = products.map((product) => ({
-        label: product.name,
-        value: product.id,
-      }));
+  const productOptions: ComboboxOption[] = products.map((product) => ({
+    label: product.name,
+    value: product.id,
+  }));
+
+    /* Função para listar as entradas */
+    const entries = await getEntries();
 
   return (
     <>
@@ -38,8 +43,13 @@ const EntriesPage = async () => {
             </span>
             <h2 className="text-xl font-semibold">Entradas</h2>
           </div>
-          <CreateEntrieButton products={products} productOptions={productOptions} />
+          <CreateEntrieButton
+            products={products}
+            productOptions={productOptions}
+          />
         </div>
+        <DataTable columns={entrieTableColumns} data={JSON.parse(JSON.stringify(entries))}
+          pageSize={4} />  
       </div>
     </>
   );

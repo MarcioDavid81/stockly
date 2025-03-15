@@ -1,3 +1,5 @@
+"use client";
+
 import {
   LayoutGridIcon,
   Minimize2Icon,
@@ -8,39 +10,80 @@ import SidebarButton from "./sidebar-button";
 
 import Image from "next/image";
 import { UserButton } from "@clerk/nextjs";
+import { useState } from "react";
+import { Separator } from "./ui/separator";
+import { Tooltip } from "./tooltip";
+
+const ROUTES = [
+  {
+    name: "Dashboard",
+    href: "/dashboard",
+    icon: LayoutGridIcon,
+  },
+  {
+    name: "Produtos",
+    href: "/products",
+    icon: PackageIcon,
+  },
+  {
+    name: "Entradas",
+    href: "/entradas",
+    icon: TruckIcon,
+  },
+  {
+    name: "Saídas",
+    href: "/saidas",
+    icon: Minimize2Icon
+  }
+]
+
 
 const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
-    <div className="flex h-screen w-64 flex-col justify-between bg-white">
+    <div
+      className={`${isOpen ? "w-72" : "w-20"} relative flex h-screen flex-col justify-between bg-white transition-all duration-300`}
+    >
+      <Image
+        src="/control.png"
+        alt="Stockly"
+        width={30}
+        height={30}
+        className={`absolute -right-3 top-10 cursor-pointer rounded-full border-2 ${isOpen ? "" : "rotate-180"}`}
+        onClick={() => setIsOpen(!isOpen)}
+      />
       <div>
-        {/* IMAGEM */}
-        <div className="px-2 py-4">
-
+        {/* LOGO */}
+        <div className="flex items-center justify-center px-2 py-4 text-4xl font-extrabold">
+          {isOpen ? (
             <Image src="/logosf.png" alt="Stockly" width={200} height={100} />
-
+          ) : (
+            <Image src="/tractor.png" alt="Tractor" width={45} height={45} />
+          )}
         </div>
+        <Separator />
         {/* BOTÕES */}
-        <div className="flex flex-col gap-2 p-2">
-          <SidebarButton href="/dashboard">
-            <LayoutGridIcon size={20} />
-            Dashboard
-          </SidebarButton>
-          <SidebarButton href="/products">
-            <PackageIcon size={20} />
-            Produtos
-          </SidebarButton>
-          <SidebarButton href="/entradas">
-            <TruckIcon size={20} />
-            Entradas
-          </SidebarButton>
-          <SidebarButton href="/saidas">
-            <Minimize2Icon size={20} />
-            Saídas
-          </SidebarButton>
+        <div className={`${isOpen ? "" : "items-center"} flex flex-col gap-2 p-2`}>
+
+          {ROUTES.map((route, index) => (
+            <Tooltip key={index} content={route.name}>
+              <SidebarButton href={route.href}>
+              <route.icon size={20} />
+              <span className={`duration-300 ${!isOpen && "hidden"}`}>
+                {route.name}
+              </span>
+            </SidebarButton>
+            </Tooltip>
+          ))}
+
         </div>
       </div>
-      <div className="px-2 py-4 mb-10">
-        <UserButton showName />
+
+      {/* USER */}
+      <div className="mb-4 py-4 text-center">
+      <Separator className="mb-4" />
+        {isOpen ? <UserButton showName /> : <UserButton />}
       </div>
     </div>
   );

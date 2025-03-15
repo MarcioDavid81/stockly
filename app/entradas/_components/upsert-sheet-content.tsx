@@ -34,10 +34,10 @@ import {
   TableRow,
 } from "@/app/_components/ui/table";
 import { formatCurrency } from "@/app/_helpers/currency";
-import TableDropdownMenu from "./table-dropdown-menu";
 import { Product } from "@prisma/client";
 import { toast } from "sonner";
 import { createEntrie } from "@/app/_actions/entrie/upsert-entrie";
+import UpsertEntrieTableDropdownMenu from "./upsert-table-dropdown-menu";
 
 const formSchema = z.object({
   productId: z.string().uuid({
@@ -111,7 +111,7 @@ const UpsertSheetContent = ({
     });
   };
 
-  /*Função par memorizar o valor total da saída */
+  /*Função par memorizar o valor total da entrada */
   const productsTotal = useMemo(() => {
     return selectedProducts.reduce(
       (acc, product) => acc + product.price * product.quantity,
@@ -124,14 +124,14 @@ const UpsertSheetContent = ({
     return selectedProducts.reduce((acc, product) => acc + product.quantity, 0);
   }, [selectedProducts]);
 
-  /*Função para excluir o produto da lista de saída */
+  /*Função para excluir o produto da lista de entrada */
   const onDelete = (productId: string) => {
     setSelectedProducts((currentProducts) => {
       return currentProducts.filter((product) => product.id !== productId);
     });
   };
 
-  /*Função para registrar a saída */
+  /*Função para registrar a entrada */
   const onSubmitEntrie = async () => {
     try {
       await createEntrie({
@@ -150,9 +150,9 @@ const UpsertSheetContent = ({
   return (
     <SheetContent className="!max-w-[700px]">
       <SheetHeader>
-        <SheetTitle>Nova Saída</SheetTitle>
+        <SheetTitle>Nova Entrada</SheetTitle>
         <SheetDescription>
-          Insira abaixo, as informações da saída
+          Insira abaixo, as informações da entrada
         </SheetDescription>
       </SheetHeader>
 
@@ -225,7 +225,10 @@ const UpsertSheetContent = ({
                 )}
               </TableCell>
               <TableCell>
-                <TableDropdownMenu product={product} onDelete={onDelete} />
+                <UpsertEntrieTableDropdownMenu
+                  product={product}
+                  onDelete={onDelete}
+                />
               </TableCell>
             </TableRow>
           ))}

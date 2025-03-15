@@ -38,7 +38,7 @@ const ProductsPage = async () => {
         </div>
         <DataTable
           columns={productTableColumns}
-          data={JSON.parse(JSON.stringify(products))}
+          data={products}
           pageSize={4}
         />
       </div>
