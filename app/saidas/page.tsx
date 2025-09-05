@@ -9,6 +9,7 @@ import CreateExitButton from "./_components/create-exit-button";
 import { DataTable } from "../_components/ui/data-table";
 import { exitTableColumns } from "./_components/table-colums";
 import { getExits } from "../_data-access/exits/get-exits";
+import Decimal from "decimal.js";
 
 export const metadata: Metadata = {
   title: "Saídas",
@@ -29,6 +30,12 @@ const ExitsPage = async () => {
     value: product.id,
   }));
 
+  // Convert price from number to Decimal
+    const productsWithDecimalPrice = products.map((product) => ({
+      ...product,
+      price: new Decimal(product.price),
+    }));
+
   /* Função para listar as saídas */
   const exits = await getExits();
 
@@ -45,14 +52,14 @@ const ExitsPage = async () => {
             <h2 className="text-xl font-semibold">Saídas</h2>
           </div>
           <CreateExitButton
-            products={products}
+            products={productsWithDecimalPrice}
             productOptions={productOptions}
           />
         </div>
         <DataTable
           columns={exitTableColumns}
           data={JSON.parse(JSON.stringify(exits))}
-          pageSize={4}
+          pageSize={5}
         />
       </div>
     </>

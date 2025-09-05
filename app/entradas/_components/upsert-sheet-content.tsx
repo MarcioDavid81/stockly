@@ -111,7 +111,7 @@ const UpsertSheetContent = ({
     });
   };
 
-  /*Função par memorizar o valor total da entrada */
+  /*Função para memorizar o valor total da entrada */
   const productsTotal = useMemo(() => {
     return selectedProducts.reduce(
       (acc, product) => acc + product.price * product.quantity,

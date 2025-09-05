@@ -1,6 +1,9 @@
 import { db } from "@/app/_lib/prisma";
 
-//Apenas para fins de demonstração, não use em produção
+//Aqui estamos utilizando Route Handlers => https://nextjs.org/docs/app/building-your-application/routing/route-handlers
+//Apenas para fins de demonstração, não use em produção Route Handlers com Prisma Client, pode ser substituído por Data Access Layer (DAL) => https://nextjs.org/blog/security-nextjs-server-components-actions
+
+
 
 export async function GET() {
   const products = await db.product.findMany();

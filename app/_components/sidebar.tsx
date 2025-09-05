@@ -8,11 +8,11 @@ import {
 } from "lucide-react";
 import SidebarButton from "./sidebar-button";
 
-import Image from "next/image";
 import { UserButton } from "@clerk/nextjs";
+import Image from "next/image";
 import { useState } from "react";
-import { Separator } from "./ui/separator";
 import { Tooltip } from "./tooltip";
+import { Separator } from "./ui/separator";
 
 const ROUTES = [
   {
@@ -33,17 +33,16 @@ const ROUTES = [
   {
     name: "Saídas",
     href: "/saidas",
-    icon: Minimize2Icon
-  }
-]
-
+    icon: Minimize2Icon,
+  },
+];
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div
-      className={`${isOpen ? "w-72" : "w-20"} relative flex h-screen flex-col justify-between bg-white transition-all duration-300`}
+      className={`${isOpen ? "w-72" : "w-20"} relative hidden h-screen flex-col justify-between bg-white transition-all duration-300 md:flex`}
     >
       <Image
         src="/control.png"
@@ -64,25 +63,25 @@ const Sidebar = () => {
         </div>
         <Separator />
         {/* BOTÕES */}
-        <div className={`${isOpen ? "" : "items-center"} flex flex-col gap-2 p-2`}>
-
+        <div
+          className={`${isOpen ? "" : "items-center"} flex flex-col gap-2 p-2`}
+        >
           {ROUTES.map((route, index) => (
             <Tooltip key={index} content={route.name}>
               <SidebarButton href={route.href}>
-              <route.icon size={20} />
-              <span className={`duration-300 ${!isOpen && "hidden"}`}>
-                {route.name}
-              </span>
-            </SidebarButton>
+                <route.icon size={20} />
+                <span className={`duration-300 ${!isOpen && "hidden"}`}>
+                  {route.name}
+                </span>
+              </SidebarButton>
             </Tooltip>
           ))}
-
         </div>
       </div>
 
       {/* USER */}
       <div className="mb-4 py-4 text-center">
-      <Separator className="mb-4" />
+        <Separator className="mb-4" />
         {isOpen ? <UserButton showName /> : <UserButton />}
       </div>
     </div>

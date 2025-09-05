@@ -7,13 +7,6 @@ import ProductTableDropdownMenu from "./table-dropdown-menu";
 import { Button } from "@/app/_components/ui/button";
 import ProductStatusBadge from "@/app/_components/product-status-badge";
 
-const getStatusLabel = (status: string) => {
-  if (status === "IN_STOCK") {
-    return "Em Estoque";
-  }
-  return "Fora de Estoque";
-};
-
 export const productTableColumns: ColumnDef<Product>[] = [
   {
     accessorKey: "name",
@@ -52,7 +45,7 @@ export const productTableColumns: ColumnDef<Product>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row: { original: product } }) => {
-      return <ProductStatusBadge status={product.status} />;
+      return <ProductStatusBadge status={product.stock > 0 ? "IN_STOCK" : "OUT_OF_STOCK"} />;
     },
   },
   {

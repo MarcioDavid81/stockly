@@ -8,6 +8,7 @@ import { ComboboxOption } from "../_components/ui/combobox";
 import { DataTable } from "../_components/ui/data-table";
 import { entrieTableColumns } from "./_components/table-colums";
 import { getEntries } from "../_data-access/entries/get-entries";
+import Decimal from "decimal.js";
 
 export const metadata: Metadata = {
   title: "Entradas",
@@ -29,6 +30,12 @@ const EntriesPage = async () => {
     value: product.id,
   }));
 
+  // Convert price from number to Decimal
+    const productsWithDecimalPrice = products.map((product) => ({
+      ...product,
+      price: new Decimal(product.price),
+    }));
+
     /* Função para listar as entradas */
     const entries = await getEntries();
 
@@ -44,12 +51,12 @@ const EntriesPage = async () => {
             <h2 className="text-xl font-semibold">Entradas</h2>
           </div>
           <CreateEntrieButton
-            products={products}
+            products={productsWithDecimalPrice}
             productOptions={productOptions}
           />
         </div>
         <DataTable columns={entrieTableColumns} data={JSON.parse(JSON.stringify(entries))}
-          pageSize={4} />  
+          pageSize={5} />  
       </div>
     </>
   );

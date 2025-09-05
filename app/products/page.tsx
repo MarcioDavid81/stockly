@@ -14,6 +14,8 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
+import { Decimal } from "decimal.js";
+
 const ProductsPage = async () => {
   const products = await getProducts();
 
@@ -22,6 +24,12 @@ const ProductsPage = async () => {
     if (!userId) {
       redirect("/");
     }
+
+  // Convert price from number to Decimal
+  const productsWithDecimalPrice = products.map((product) => ({
+    ...product,
+    price: new Decimal(product.price),
+  }));
 
   return (
     <>
@@ -38,8 +46,8 @@ const ProductsPage = async () => {
         </div>
         <DataTable
           columns={productTableColumns}
-          data={products}
-          pageSize={4}
+          data={productsWithDecimalPrice}
+          pageSize={5}
         />
       </div>
     </>

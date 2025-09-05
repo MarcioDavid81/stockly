@@ -7,9 +7,10 @@ import { usePathname } from "next/navigation";
 interface SidebarButtonProps {
     children: React.ReactNode;
     href: string;
+    className?: string
 }
 
-const SidebarButton = ({href, children}: SidebarButtonProps) => {
+const SidebarButton = ({href, children, className}: SidebarButtonProps) => {
   const pathName = usePathname();
 
   return (
@@ -18,7 +19,7 @@ const SidebarButton = ({href, children}: SidebarButtonProps) => {
       className="justify-start gap-2"
       asChild
     >
-      <Link href={href}>
+      <Link href={href} className={className}>
         {children}
       </Link>
     </Button>
