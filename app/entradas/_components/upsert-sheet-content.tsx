@@ -19,7 +19,7 @@ import {
   SheetTitle,
 } from "@/app/_components/ui/sheet";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckIcon, PlusIcon } from "lucide-react";
+import { CheckIcon, Loader, PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -66,9 +66,8 @@ const UpsertSheetContent = ({
   productOptions,
   onSubmitSuccess,
 }: UpsertSheetContentProps) => {
-  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>(
-    [],
-  );
+  const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -79,16 +78,16 @@ const UpsertSheetContent = ({
   });
 
   const onSubmit = (data: FormSchema) => {
-    console.log(data);
-
     const selectedProduct = products.find(
       (product) => product.id === data.productId,
     );
     if (!selectedProduct) return;
+
     setSelectedProducts((currentProducts) => {
       const existedProduct = currentProducts.find(
         (product) => product.id === selectedProduct.id,
       );
+
       if (existedProduct) {
         return currentProducts.map((product) => {
           if (product.id === selectedProduct.id) {
@@ -100,6 +99,7 @@ const UpsertSheetContent = ({
           return product;
         });
       }
+
       return [
         ...currentProducts,
         {
@@ -133,6 +133,8 @@ const UpsertSheetContent = ({
 
   /*Função para registrar a entrada */
   const onSubmitEntrie = async () => {
+    setLoading(true);
+
     try {
       await createEntrie({
         products: selectedProducts.map((product) => ({
@@ -144,6 +146,8 @@ const UpsertSheetContent = ({
       onSubmitSuccess();
     } catch (error) {
       toast.error("Erro ao registrar a entrada.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -248,11 +252,20 @@ const UpsertSheetContent = ({
         <Button
           className="w-full gap-2"
           variant="default"
-          disabled={selectedProducts.length === 0}
+          disabled={selectedProducts.length === 0 || loading}
           onClick={onSubmitEntrie}
         >
-          <CheckIcon size={20} />
-          Registrar Entrada
+          {loading ? (
+            <>
+              <Loader size={20} className="animate-spin" />
+              Registrando Entrada...
+            </>
+          ) : (
+            <>
+              <CheckIcon size={20} />
+              Registrar Entrada
+            </>
+          )}
         </Button>
       </SheetFooter>
     </SheetContent>
