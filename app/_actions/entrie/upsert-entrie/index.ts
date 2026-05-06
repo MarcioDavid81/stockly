@@ -33,6 +33,8 @@ export const createEntrie = async (data: UpsertEntrieSchema) => {
           unitPrice: productFromDb.price,
         },
       });
+  
+      /*Atualiza o estoque do produto */
       await trx.product.update({
         where: {
           id: product.id,
